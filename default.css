@@ -1,0 +1,69 @@
+body {
+  font-family: arial;
+  background-color: white;
+}
+h1 {
+  border: 1px solid black;
+  background-color: #cccccc;
+  color: #3399ff;
+  text-align: center;
+}
+table {
+  border: 2px solid #99ff99;
+  background-color: white;
+  color: black;
+}
+
+td {
+  border:  none;
+  text-align: left;
+}
+p {
+  color: #0099ff;
+  text-indent: 20px;
+}
+
+.Kleur1{background-image: linear-gradient(to bottom, #340444 0%, #DCCBE1 100%);}
+.Kleur2{background-image: linear-gradient(to bottom, #2837DE 0%, #2837DE 100%);}    
+.Kleur3{background-image: linear-gradient(to bottom, #9305C2 0%, #920261 100%);}
+.Kleur4{background-image: linear-gradient(to bottom, #82B1FC 0%, #82B1FC 100%);}
+.Kleur5{background-image: linear-gradient(to bottom, #FEF100 0%, #8003DF 100%);}
+
+.Kleur6{background-image: linear-gradient(to bottom, #FEF100 0%, #FEF100 100%);}
+.Kleur7{background-image: linear-gradient(to bottom, #FEF100 0%, #FEF100 100%);}
+.Kleur8{background-image: linear-gradient(to bottom, #FD0116 0%, #202020 100%);}
+.Kleur9{background-image: linear-gradient(to bottom, #FCF956 0%, #FCF956 100%);}
+.Kleur10{background-image: linear-gradient(to bottom, #2837DE 0%, #2837DE 100%);}
+
+.Kleur11{background-image: linear-gradient(to bottom, #F29A02 0%, #F29A02 100%);}
+.Kleur12{background-image: linear-gradient(to bottom, #F29A02 0%, #FEF100 100%);}
+.Kleur13{background-image: linear-gradient(to bottom, #9305C2 0%, #9305C2 100%);}
+.Kleur14{background-image: linear-gradient(to bottom, #9305C2 0%, #FEF100 100%);}
+.Kleur15{background-image: linear-gradient(to bottom, #9305C2 0%, #FCFAFD 100%);}
+
+.Kleur16{background-image: linear-gradient(to bottom, #FBB4FA 0%, #FBB4FA 100%);}
+.Kleur17{background-image: linear-gradient(to bottom, #D50823 0%, #D50823 100%);}
+.Kleur18{background-image: linear-gradient(to bottom, #D50823 0%, #FEF100 100%);}
+.Kleur19{background-image: linear-gradient(to bottom, #D50823 0%, #F29A02 100%);}
+.Kleur20{background-image: linear-gradient(to bottom, #FC56F3 0%, #FC56F3 100%);}
+
+.Kleur21{background-image: linear-gradient(to bottom, #FCFAFD 0%, #FCFAFD 100%);}
+.Kleur22{background-image: linear-gradient(to bottom, #FCFAFD 0%, #FCFAFD 100%);}
+.Kleur23{background-image: linear-gradient(to bottom, #F04DCA 0%, #FCFAFD 100%);}
+.Kleur24{background-image: linear-gradient(to bottom, #F04DCA 0%, #F5EF42 100%);}
+.Kleur25{background-image: linear-gradient(to bottom, #BD4B13 0%, #EDB658 100%);}
+
+.Kleur26{background-image: linear-gradient(to bottom, #FCFAFD 0%, #636263 100%);}
+.Kleur27{background-image: linear-gradient(to bottom, #EDA8E4 0%, #EDA8E4 100%);}
+.Kleur28{background-image: linear-gradient(to bottom, #F7F41B 0%, #94920A 100%);}
+.Kleur29{background-image: linear-gradient(to bottom, #811994 0%, #811994 100%);}
+
+
+
+
+
+
+
+
+
+
