@@ -12,6 +12,15 @@
 
 
 <?php
+/*
+ * @script		: 	view.php
+ * @description	: 	Toont de data op de TV
+ * @modified	: 	9-5-2018
+ * @history		:
+ * 					09-05-2018 tabel opdrachten_norm vrije invoervelden.
+ * 					30-04-2018 change sql to mysqli_connect
+ *
+ */
 //Connect to MySQL
 
 // voor uitlezen gpio
@@ -124,55 +133,101 @@ while($row = $result->fetch_array())
     $timestamp= date("H:i"); 
  
 
-echo"<table style='width: 100%; font-size:30pt; text-align:left' margin-left=1 margin-right=1 cellpadding=4 cellspacing='5' >";
+	echo"<table style='width: 100%; font-size:30pt; text-align:left' margin-left=1 margin-right=1 cellpadding=4 cellspacing='5' >";
 
- echo "
+ 	echo "
      <tr><td colspan=2>Klant Order " .$row['klantorder']." </td ><td>".$timestamp." </td></tr>
      <tr><td colspan=2>".$row['OpdrComm']." </td><td>".$labelstatus."</td></tr>
-     <tr bgcolor='#dcdcdc'><td>Lg</td> <td>St</td> <td colspan=2 ><center>Artikel</center></td> <td colspan=2><center>Kleur</center></td> ";  
+     <tr bgcolor='#dcdcdc'><td>Lg</td> <td>St</td> <td colspan=2 ><center>Artikel</center></td> <td colspan=2><center>Kleur</center></td></tr>\r\n ";  
      
-  $opdrachtint =(int)$row['orderid'];
-   
-for($i=11; $i >=1; $i--)
-   {
-    echo "<tr><td >".$i."</td > <td> ".$row["VullenLaag".$i.""]." </td > "; 
-    for ($l=1; $l<=count($ProductNaam); $l++)// productnaam doorlopen totdat er een match is 
-    { 
-        if ($l == $row['ProductLaag'.$i.''] )
-        {
-            
-            echo "<td>".$ProductNaam[$l]."</td>";
-        } 
-        
-     }
+	$opdrachtint =(int)$row['orderid'];
+  
+	// check voor alternative producten uit de vrije invoervelden.
+	$q=$verbinding->query("select * from opdrachten_norm where oridid='".$opdrachtint."'");
+	$qArray=$q->fetch_all(MYSQLI_ASSOC);
+	for($i=11; $i >=1; $i--)
+	{
+	    echo "<tr><td >".$i."</td > <td> ".$row["VullenLaag".$i.""]." </td > "; 
+	    for ($l=1; $l<=count($ProductNaam); $l++)// productnaam doorlopen totdat er een match is 
+		    { 
+		        if ($l == $row['ProductLaag'.$i.''] )
+		        {
+		        	$ProductDef = $ProductNaam[$l];
+		            // loop door opdrachten_norm om te kijken of er een override is
+ 		            foreach ($qArray as $qRow) {
 
-     for ($l=1; $l<=count($ProductNaam); $l++)// productnaam doorlopen totdat er een match is
-     {
-     	if ($l == $row['ProductLaag'.$i.'B'] )
-     	{
-     
-     		echo "<td>".$ProductNaamB[$l]."</td>";
-     	}
-     
-     }     
-     
-     for ($k=1; $k<=count($KleurNaam); $k++)
+		            	if($qRow['laag']==$i ) // ik heb een regel op laag $i
+		            	{
+		            		if (!empty($qRow['product'])) $ProductDef=$qRow['product'];
+		            	}
+		            } 
+		            echo "<td>".$ProductDef."</td>";
+		        } 
+		        
+		     }
+	
+	     for ($l=1; $l<=count($ProductNaam); $l++)// productnaam doorlopen totdat er een match is
+		     { 
+		     	
+		     	if ($l == $row['ProductLaag'.$i.'B'] )
+		     	{
+		     		$ProductDefB = $ProductNaamB[$l];
+		     		// loop door opdrachten_norm om te kijken of er een override is
+ 		     		foreach ($qArray as $qRow) {
+		     		
+		     			if($qRow['laag']==$i ) // ik heb een regel op laag $i
+		     			{
+		     				if (!empty($qRow['productB'])) $ProductDefB=$qRow['productB'];
+		     			}
+		     		}	     		
+		     
+		     		echo "<td>".$ProductDefB."</td>";
+		     	}
+		     
+		     }     
+	     
+	     for ($k=1; $k<=count($KleurNaam); $k++)
             {
                 if ($k == $row['KleurLaag'.$i.''] )
                 {
-                    echo "<td class='Kleur".$k."';>".$KleurNaam[$k]."</td>";
+                	$KleurNaamDef = $KleurNaam[$k];
+                	$kCode=$k;
+                	
+                	foreach ($qArray as $qRow) {
+                		 
+                		if($qRow['laag']==$i ) // ik heb een regel op laag $i
+                		{
+                			if (!empty($qRow['kleur'])) {$KleurNaamDef=$qRow['kleur'];$kCode="";}
+                			
+                		}
+                	}                	
+                	
+                    echo "<td class='Kleur".$kCode."';>".$KleurNaamDef."</td>";
                 }
+                
             }
             for ($k=1; $k<=count($KleurNaam); $k++)
             {
             	if ($k == $row['KleurLaag'.$i.'B'] )
             	{
-            		echo "<td class='Kleur".$k."';>".$KleurNaamB[$k]."</td>";
+                	$KleurNaamDefB = $KleurNaamB[$k];
+                	$kCodeB=$k;
+                	
+                	foreach ($qArray as $qRow) {
+                		 
+                		if($qRow['laag']==$i ) // ik heb een regel op laag $i
+                		{
+                			if (!empty($qRow['kleurB'])) {$KleurNaamDefB=$qRow['kleurB'];$kCodeB="";}
+                			
+                		}
+                	}                	
+                	
+                    echo "<td class='Kleur".$kCodeB."';>".$KleurNaamDefB."</td>";
             	}
             }   
-    
-    echo "</tr>";
-}
+	    
+	    echo "</tr>\r\n";
+	}
 echo "<tr><td colspan=4>".$row['gemiddelde']." karren per uur </td></tr>";
 echo "<tr><td colspan=4><strong>".$intVerwerkt = (int)$row['verwerkt']."</strong> van de <strong> " .$intAantal=(int)$row['orderaantal']."</strong>verwerkt </td></tr>";
   

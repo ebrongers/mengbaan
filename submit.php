@@ -6,10 +6,17 @@
 </head>
 <body>
 <?php
-//the example of inserting data with variable from HTML form
-//input.php
+/*
+ * @script: submit.php
+ * @description: verwerkt de ingevoerde data van de opdracht.
+ * @modified: 9-5-2018
+ * @history:
+ * 			09-05-2018 add table opdrachten_norm for delete of data. vrije invoervelden.
+ * 			30-04-2018 change sql to mysqli_connect
+ *
+ */
+
 $verbinding=mysqli_connect('127.0.0.1', 'pi',NULL, 'baaskarrendb') or die (mysql_error());
-#mysql_select_db('baaskarrendb') or die (mysql_error());
 
 
 $status = 3; //$_REQUEST['status'];
@@ -44,6 +51,30 @@ foreach($_REQUEST['ProductNaamB'] as $key => $ProductNaamB[$j])
     	$j++;
     }    
 
+    
+$k =1;
+foreach($_REQUEST['anders_productnaam'] as $key => $anders_productnaam[$k])
+    { //echo $Station[$k];
+    $k++;
+    }
+    
+$k =1;
+foreach($_REQUEST['anders_productnaamB'] as $key => $anders_productnaamB[$k])
+    { //echo $Station[$k];
+    $k++;
+    }    
+$k =1;
+foreach($_REQUEST['anders_kleur'] as $key => $anders_kleur[$k])
+    { //echo $Station[$k];
+    $k++;
+    }
+    
+$k =1;
+foreach($_REQUEST['anders_kleurB'] as $key => $anders_kleurB[$k])
+    { //echo $Station[$k];
+    $k++;
+    }
+    
 $k =1;
 foreach($_REQUEST['Station'] as $key => $Station[$k]) 
     { //echo $Station[$k];
@@ -51,6 +82,8 @@ foreach($_REQUEST['Station'] as $key => $Station[$k])
     }
 
 
+    
+    
 $verwerkt=$_REQUEST['verwerkt'];
 $orderaantal=$_REQUEST['orderaantal']; 
 $bewerking= $_REQUEST['bewerking']; //  1 = updaten, 2 = vewijderen, 3 opnieuw toevoegen. 
@@ -193,19 +226,7 @@ if (isset($_POST["Toevoegen"]))
         		"','".$KleurIDB[1].        		
         		"')");
          
-// kijken naar het hoogste volgorder om hier een bij te doen en deze te updaten naar de DB
-        $rowSQL = $verbinding->query("SELECT MAX(volgorder) AS max FROM opdrachten");
-        $row = $rowSQL->fetch_array( );
-        $resultmaxbewerking =(int) $row['max'];
-        //echo "resultaat max bewerking", $resultmaxbewerking;
-        
-       // if  ($resultmaxbewerking == 0 ) 
-       // {   
-       //     $resultmaxbewerking=1;
-       // }
-       // else {
-       //     $resultmaxbewerking ++;
-       // }
+
        $resultmaxbewerking=0;
         // Hoogste lijn uit de database halen. 
         $resultlines =$verbinding->query("SELECT MAX(orderid) As max FROM opdrachten");
@@ -214,9 +235,33 @@ if (isset($_POST["Toevoegen"]))
         //$aantal_rijen_in_DB = mysql_num_rows($resultlines);
         //echo "hoogste id in database ", $hoogsteIDinDB;
         $verbinding->query("UPDATE opdrachten SET VullenLaag1='".$Station[11]."', VullenLaag2='".$Station[10]."',VullenLaag3='".$Station[9]."',VullenLaag4='".$Station[8]."',VullenLaag5='".$Station[7]."',VullenLaag6='".$Station[6]."',VullenLaag7='".$Station[5]."',VullenLaag8='".$Station[4]."',VullenLaag9='".$Station[3]."',VullenLaag10='".$Station[2]."',VullenLaag11='".$Station[1]."',volgorder='".$resultmaxbewerking."' WHERE orderid='".$hoogsteIDinDB."' ");
+
+		
+		
+			for($teller=1;$teller<12;$teller++) 
+			{
+				
+				
+				if ($anders_productnaam[12-$teller] !='' ||
+					$anders_productnaamB[12-$teller] !='' ||
+					$anders_kleur[12-$teller] !='' ||
+					$anders_kleur[12-$teller] !='')
+				{
+				$verbinding->query("insert into opdrachten_norm (oridid,laag,product,kleur,productB,kleurB) values (
+						'".$hoogsteIDinDB."',
+						'".$teller."',
+						'".$anders_productnaam[12-$teller]."',
+						'".$anders_kleur[12-$teller]."',
+						'".$anders_productnaamB[12-$teller]."',
+						'".$anders_kleurB[12-$teller]."'
+						)");
+			}
+		}
+        
+        $verbinding->close();
         ?>
           <script type="text/javascript">
-            alert("Opdracht is toegevoegd");
+            alert("Toegevoegd");
             history.back();
           </script>
         <?php 

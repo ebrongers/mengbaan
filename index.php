@@ -19,7 +19,16 @@
 <tbody>
 
 <?php 
-
+/*
+ * @script: index.php
+ * @description: laat scherm zien met invoer mogelijkheden.
+ * @modified: 9-5-2018
+ * @history:
+ * 			09-05-2018 	add table opdrachten_norm for delete of data. vrije invoervelden.
+ * 			30-04-2018 	2e product op een plaat mogelijk gemaakt
+ * 						mysql_select_db overgezet naar mysqli_connect
+ *
+ */
 $verbinding = mysqli_connect('127.0.0.1', 'pi',NULL,'baaskarrendb') or die (mysqli_error($verbinding));
 //mysql_select_db('baaskarrendb') or die (mysql_error());
     if ($verbinding == false) // geen verbinding 
@@ -181,6 +190,10 @@ for ($j=11; $j >=1; $j--)
        
     }
     echo "</select>";
+    // toevoeging van "anders" overschrijft de selectie als deze is ingevuld
+    ?>
+    <input name="anders_productnaam[]" placeholder="anders"  style="width:100px" />
+    <?php 
    	echo "</td>\r\n";
    	
    	echo "<td><select name='ProductNaamB[]' >\r\n";
@@ -198,6 +211,10 @@ for ($j=11; $j >=1; $j--)
    		 
    	}
    	echo "</select>";
+   	// toevoeging van "anders" overschrijft de selectie als deze is ingevuld
+   	?>
+   	    <input name="anders_productnaamB[]" placeholder="anders"  style="width:100px" />
+   	    <?php    	
    	echo "</td>\r\n";   	
    	
     echo "<td><select name='KleurID[]' onchange='updateText()'>\r\n"; 
@@ -215,7 +232,10 @@ for ($j=11; $j >=1; $j--)
   
 
  	echo "</select>";
-  
+ 	// toevoeging van "anders" overschrijft de selectie als deze is ingevuld
+ 	?>
+ 	    <input name="anders_kleur[]" placeholder="anders" style="width:100px" />
+ 	    <?php   
  	echo "<td><select name='KleurIDB[]' onchange='updateText()'>\r\n";
  	for ($i=1; $i<=count($KleurNaam); $i++)
  	{
@@ -231,7 +251,10 @@ for ($j=11; $j >=1; $j--)
  	
  	
  	echo "</select>";  
- 	
+ 	// toevoeging van "anders" overschrijft de selectie als deze is ingevuld
+ 	?>
+ 	    <input name="anders_kleurB[]" placeholder="anders" style="width:100px" />
+ 	    <?php  	
  	
 // hier de stations toevoeging
      echo "<td><select name='Station[]'>"; 
