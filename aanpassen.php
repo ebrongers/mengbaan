@@ -9,9 +9,9 @@
 <!--<div style="text-align: center;"><img style="width: 200px; height: 200px;" alt="Rpi" src="baaslogo.jpg"><br></div>-->
 <br>
 
+<form method="post" action="DelOpdracht.php">
 <table style="text-align: left; margin-left: auto; margin-right: auto;">
-<form method="post" action="submit.php">
-<form method="post" action="DelOpdracht.php"
+
 <tbody>
 
 <?php

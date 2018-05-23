@@ -234,7 +234,19 @@ if (isset($_POST["Toevoegen"]))
         $hoogsteIDinDB=(int)$row['max'];       
         //$aantal_rijen_in_DB = mysql_num_rows($resultlines);
         //echo "hoogste id in database ", $hoogsteIDinDB;
-        $verbinding->query("UPDATE opdrachten SET VullenLaag1='".$Station[11]."', VullenLaag2='".$Station[10]."',VullenLaag3='".$Station[9]."',VullenLaag4='".$Station[8]."',VullenLaag5='".$Station[7]."',VullenLaag6='".$Station[6]."',VullenLaag7='".$Station[5]."',VullenLaag8='".$Station[4]."',VullenLaag9='".$Station[3]."',VullenLaag10='".$Station[2]."',VullenLaag11='".$Station[1]."',volgorder='".$resultmaxbewerking."' WHERE orderid='".$hoogsteIDinDB."' ");
+        $verbinding->query("UPDATE opdrachten SET 
+        		VullenLaag1='".$Station[11]."', 
+        		VullenLaag2='".$Station[10]."',
+        		VullenLaag3='".$Station[9]."',
+        		VullenLaag4='".$Station[8]."',
+        		VullenLaag5='".$Station[7]."',
+        		VullenLaag6='".$Station[6]."',
+        		VullenLaag7='".$Station[5]."',
+        		VullenLaag8='".$Station[4]."',
+        		VullenLaag9='".$Station[3]."',
+        		VullenLaag10='".$Station[2]."',
+        		VullenLaag11='".$Station[1]."',
+        		volgorder='".$resultmaxbewerking."' WHERE orderid='".$hoogsteIDinDB."' ");
 
 		
 		
@@ -255,8 +267,8 @@ if (isset($_POST["Toevoegen"]))
 						'".$anders_productnaamB[12-$teller]."',
 						'".$anders_kleurB[12-$teller]."'
 						)");
+				}
 			}
-		}
         
         $verbinding->close();
         ?>
@@ -326,6 +338,27 @@ elseif (isset($_POST["Updaten"]))
         		ProductLaag10='".$ProductNaam[2]."',
         		ProductLaag11='".$ProductNaam[1]."' WHERE orderid='".$DB_line."' ");
         $verbinding->query("UPDATE opdrachten SET VullenLaag1='".$Station[11]."', VullenLaag2='".$Station[10]."',VullenLaag3='".$Station[9]."',VullenLaag4='".$Station[8]."',VullenLaag5='".$Station[7]."',VullenLaag6='".$Station[6]."',VullenLaag7='".$Station[5]."',VullenLaag8='".$Station[4]."',VullenLaag9='".$Station[3]."',VullenLaag10='".$Station[2]."',VullenLaag11='".$Station[1]."' WHERE orderid='".$DB_line."' ");
+        $verbinding->query("DELETE FROM opdrachten_norm where oridid='".$DB_line."' ");
+        for($teller=1;$teller<12;$teller++)
+        {
+        
+        
+        	if ($anders_productnaam[12-$teller] !='' ||
+        			$anders_productnaamB[12-$teller] !='' ||
+        			$anders_kleur[12-$teller] !='' ||
+        			$anders_kleur[12-$teller] !='')
+        	{
+        		$verbinding->query("insert into opdrachten_norm (oridid,laag,product,kleur,productB,kleurB) values (
+						'".$DB_line."',
+						'".$teller."',
+						'".$anders_productnaam[12-$teller]."',
+						'".$anders_kleur[12-$teller]."',
+						'".$anders_productnaamB[12-$teller]."',
+						'".$anders_kleurB[12-$teller]."'
+						)");
+        	}
+        }        
+        
         ?>
           <script type="text/javascript">
             alert("Opdracht is bijgewerkt");
@@ -400,11 +433,6 @@ elseif (isset($_POST["Recepten"]))
 { 
     header('Refresh: 0; url=recepten.php');
 }
-
-
-
-////KleurLaag1,KleurLaag2,KleurLaag3,KleurLaag4,KleurLaag5,KleurLaag6,KleurLaag7,KleurLaag8,KleurLaag9,KleurLaag10,KleurLaag11,VullenLaag1,VullenLaag2,VullenLaag3,VullenLaag4,VullenLaag5,VullenLaag6,VullenLaag7,VullenLaag8,VullenLaag9,VullenLaag10,VullenLaag11)
-//'".$ProductNaam[1]."','".$ProductNaam[2]."','".$ProductNaam[3]."','".$ProductNaam[4]."','".$ProductNaam[5]."','".$ProductNaam[6]."','".$ProductNaam[7]."','".$ProductNaam[8]."','".$ProductNaam[9]."','".$ProductNaam[10]."','".$ProductNaam[11]."','".$KleurID[1]."','".$KleurID[2]."','".$KleurID[3]."','".$KleurID[4]."','".$KleurID[5]."','".$KleurID[6]."','".$KleurID[7]."','".$KleurID[8]."','".$KleurID[9]."','".$KleurID[10]."','".$KleurID[11]."','".$Station[1]."','".$Station[2].",".$Station[3]."','".$Station[4]."','".$Station[5]."','".$Station[6]."','".$Station[7]."','".$Station[8]."','".$Station[9]."','".$Station[10]."','".$Station[11]."'
 
 ?>
 

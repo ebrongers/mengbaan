@@ -54,17 +54,17 @@ $labelgebruik[2]= "EC";
 
 
 // alle kleuren selecteren en omzetten naar een array. 
-    $resultKleur =$verbinding->query("SELECT * FROM Kleuren ");
-    $aantal_rijen_in_DB = $resultKleur->num_rows;
-    for ($i =1 ; $i <$aantal_rijen_in_DB +1; $i++ )
-    {
-       $resultaat[$i] = $verbinding->query("SELECT * FROM Kleuren WHERE KleurID ='".$i."' ");
-       $fetch_result[$i]= $resultaat[$i]->fetch_array();
-       //$Kleuren1[$i] = $fetch_result[$i]['kleur1'];
-      // $Kleuren2[$i] = $fetch_result[$i]['kleur2'];
-       $KleurNaam[$i] = $fetch_result[$i]['KleurNaam'];
+$resultKleur =$verbinding->query("SELECT * FROM Kleuren ");
+$aantal_rijen_in_DB = $resultKleur->num_rows;
+for ($i =1 ; $i <$aantal_rijen_in_DB +1; $i++ )
+{
+	$resultaat[$i] = $verbinding->query("SELECT * FROM Kleuren WHERE KleurID ='".$i."' ");
+	$fetch_result[$i]= $resultaat[$i]->fetch_array();
+	//$Kleuren1[$i] = $fetch_result[$i]['kleur1'];
+	// $Kleuren2[$i] = $fetch_result[$i]['kleur2'];
+	$KleurNaam[$i] = $fetch_result[$i]['KleurNaam'];
 
-    }
+}
 
 
 // alle Producten selecteren en omzetten naar een array. 
@@ -81,12 +81,12 @@ $Opdracht =$_GET["ID"];
 
 if (($Opdracht >= 1) and ($Opdracht <= 1000)) 
 {   //echo "komt in opdracht";
-    $recept = false;
-    $Gegevensladen =  true;
-    $bewerking=1; 
-    $ResultOpdracht = $verbinding->query("SELECT * from opdrachten WHERE orderid='".$Opdracht."'");
-    $row = $ResultOpdracht->fetch_array();
-    $Klantorder=(int)$row['klantorder'];
+	$recept = false;
+	$Gegevensladen =  true;
+	$bewerking=1; 
+	$ResultOpdracht = $verbinding->query("SELECT * from opdrachten WHERE orderid='".$Opdracht."'");
+	$row = $ResultOpdracht->fetch_array();
+	$Klantorder=(int)$row['klantorder'];
 }
 elseif ( $Opdracht >=1001){ // recepten laden
     //echo"komt in recept";
@@ -96,9 +96,6 @@ elseif ( $Opdracht >=1001){ // recepten laden
     $ResultOpdracht = $verbinding->query("SELECT * from Recepten WHERE ReceptID='".$Opdracht."'");
     $row = $ResultOpdracht->fetch_array();
 
-
-
-    //$Klantorder=(int)$row['klantorder'];
 }
 
 else
@@ -110,17 +107,18 @@ else
 }
 
 echo "<tr>";
- echo "<td><input type='hidden' name='DB_Line' value='".$Opdracht."'></td>";
+echo "<td><input type='hidden' name='DB_Line' value='".$Opdracht."'></td>";
 
 if (($Gegevensladen == true) or ($recept == true)) {
-    echo "<tr><td style='text-align: left;'  rowspan='1''><a href='index.php'>home</a></td>"; // home knop
-    if (($Gegevensladen == true) and ($recept == false))
-    {
-    echo "<td colspan='2'><H2> Opdracht bewerken </H2></td></tr>";
-    }
-    else {
-      echo "<td colspan='2'><H2> Recept Laden</H2> </td></tr>";
-    }
+	echo "<tr><td style='text-align: left;'  rowspan='1''><a href='index.php'>home</a></td>"; // home knop
+	if (($Gegevensladen == true) and ($recept == false))
+	{
+		echo "<td colspan='2'><H2> Opdracht bewerken </H2></td></tr>";
+	}
+	else 
+	{
+		echo "<td colspan='2'><H2> Recept Laden</H2> </td></tr>";
+	}
 }
 
 
@@ -156,7 +154,7 @@ for ($j=0; $j<=(count($labelgebruik)-1); $j++)
 echo "</select><br></td></tr>"; 
 
 
-///////////////////////////////////////////////////////////////////////////////////BEGIN TABEL//////////////////////////
+//////////////////////////////////////BEGIN TABEL//////////////////////////
 
 echo "<tr> </tr><td></td><td colspan='2'>Product</td><td colspan='2'>Kleur</td> <td>Station</td></tr>\r\n"; 
 //Projecteren van het tabel laag 1 tm 11
@@ -192,7 +190,19 @@ for ($j=11; $j >=1; $j--)
     echo "</select>";
     // toevoeging van "anders" overschrijft de selectie als deze is ingevuld
     ?>
-    <input name="anders_productnaam[]" placeholder="anders"  style="width:100px" />
+    <input name="anders_productnaam[]" placeholder="anders" value="<?php 
+    // check voor alternative producten uit de vrije invoervelden.
+    $q=$verbinding->query("select * from opdrachten_norm where oridid='".$Opdracht."'");
+    $qArray=$q->fetch_all(MYSQLI_ASSOC);    
+    // loop door opdrachten_norm om te kijken of er een override is
+    foreach ($qArray as $qRow) {
+    
+    	if($qRow['laag']==$j ) // ik heb een regel op laag $i
+    	{
+    		if (!empty($qRow['product'])) echo $qRow['product'];
+    	}
+    }  
+    ?>"  style="width:100px" />
     <?php 
    	echo "</td>\r\n";
    	
@@ -213,7 +223,19 @@ for ($j=11; $j >=1; $j--)
    	echo "</select>";
    	// toevoeging van "anders" overschrijft de selectie als deze is ingevuld
    	?>
-   	    <input name="anders_productnaamB[]" placeholder="anders"  style="width:100px" />
+   	    <input name="anders_productnaamB[]" placeholder="anders" value="<?php 
+    // check voor alternative producten uit de vrije invoervelden.
+    $q=$verbinding->query("select * from opdrachten_norm where oridid='".$Opdracht."'");
+    $qArray=$q->fetch_all(MYSQLI_ASSOC);    
+    // loop door opdrachten_norm om te kijken of er een override is
+    foreach ($qArray as $qRow) {
+    
+    	if($qRow['laag']==$j ) // ik heb een regel op laag $i
+    	{
+    		if (!empty($qRow['productB'])) echo $qRow['productB'];
+    	}
+    }  
+    ?>" style="width:100px" />
    	    <?php    	
    	echo "</td>\r\n";   	
    	
@@ -234,7 +256,19 @@ for ($j=11; $j >=1; $j--)
  	echo "</select>";
  	// toevoeging van "anders" overschrijft de selectie als deze is ingevuld
  	?>
- 	    <input name="anders_kleur[]" placeholder="anders" style="width:100px" />
+ 	    <input name="anders_kleur[]" placeholder="anders" value="<?php 
+    // check voor alternative producten uit de vrije invoervelden.
+    $q=$verbinding->query("select * from opdrachten_norm where oridid='".$Opdracht."'");
+    $qArray=$q->fetch_all(MYSQLI_ASSOC);    
+    // loop door opdrachten_norm om te kijken of er een override is
+    foreach ($qArray as $qRow) {
+    
+    	if($qRow['laag']==$j ) // ik heb een regel op laag $i
+    	{
+    		if (!empty($qRow['kleur'])) echo $qRow['kleur'];
+    	}
+    }  
+    ?>" style="width:100px" />
  	    <?php   
  	echo "<td><select name='KleurIDB[]' onchange='updateText()'>\r\n";
  	for ($i=1; $i<=count($KleurNaam); $i++)
@@ -253,7 +287,19 @@ for ($j=11; $j >=1; $j--)
  	echo "</select>";  
  	// toevoeging van "anders" overschrijft de selectie als deze is ingevuld
  	?>
- 	    <input name="anders_kleurB[]" placeholder="anders" style="width:100px" />
+ 	    <input name="anders_kleurB[]" placeholder="anders" value="<?php 
+    // check voor alternative producten uit de vrije invoervelden.
+    $q=$verbinding->query("select * from opdrachten_norm where oridid='".$Opdracht."'");
+    $qArray=$q->fetch_all(MYSQLI_ASSOC);    
+    // loop door opdrachten_norm om te kijken of er een override is
+    foreach ($qArray as $qRow) {
+    
+    	if($qRow['laag']==$j ) // ik heb een regel op laag $i
+    	{
+    		if (!empty($qRow['kleurB'])) echo $qRow['kleurB'];
+    	}
+    }  
+    ?>" style="width:100px" />
  	    <?php  	
  	
 // hier de stations toevoeging
